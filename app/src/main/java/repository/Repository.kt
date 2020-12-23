@@ -2,17 +2,19 @@ package com.demo.sffoodtrucks.repository
 
 import androidx.lifecycle.MutableLiveData
 import com.demo.sffoodtrucks.model.FoodTruck
+import com.demo.sffoodtrucks.view.util.NetworkResponseWrapper
 
 class Repository {
 
-    private var repoFoodTruckLiveData : MutableLiveData<FoodTruck> = MutableLiveData()
-
-    suspend fun getAllFoodTrucks():  MutableLiveData<FoodTruck>  {
+    suspend fun getAllFoodTrucks(): NetworkResponseWrapper {
             val response = FoodTrucksService.getRetrofit().getFoodTrucks()
-            repoFoodTruckLiveData.value = response.body()
-            return repoFoodTruckLiveData
+
+            if(response.isSuccessful){
+                val repoFoodTruckLiveData : MutableLiveData<FoodTruck> = MutableLiveData()
+                repoFoodTruckLiveData.value = response.body()
+                return NetworkResponseWrapper(repoFoodTruckLiveData,"success")
+            }
+            else return NetworkResponseWrapper(null,"error")
     }
-
-
 
 }

@@ -45,20 +45,30 @@ class ListFragment : Fragment() {
         return view
     }
 
+    private fun setupObservers() {
+
+        sharedViewModel.wrapper.observe(viewLifecycleOwner, Observer { netwrokResponseWrapper ->
+            when (netwrokResponseWrapper.state) {
+
+                "loading" -> Toast.makeText(context, "loading", Toast.LENGTH_LONG).show()
+                "success" -> {
+                    Toast.makeText(context, "success", Toast.LENGTH_LONG).show()
+                    sharedViewModel.openFoodTrucksLiveData.observe(viewLifecycleOwner, Observer { fti ->
+                        foodTruckListAdapter.updateFoodTruckList(fti as ArrayList<FoodTruckItem>)
+                    })
+                }
+                "error" -> {
+
+                }
+            }
+        })
+    }
+
     private fun setupRecView() {
         fragmentListBinding.listFragmentRecview.apply {
             layoutManager = LinearLayoutManager(context)
             adapter = foodTruckListAdapter
         }
-    }
-
-    private fun setupObservers() {
-        sharedViewModel.openFoodTrucksLiveData.observe(viewLifecycleOwner, Observer { fti ->
-            if(fti.size>0){
-                Toast.makeText(context,"got response",Toast.LENGTH_LONG).show()
-                foodTruckListAdapter.updateFoodTruckList(fti as ArrayList<FoodTruckItem>)
-            }
-        })
     }
 
 }

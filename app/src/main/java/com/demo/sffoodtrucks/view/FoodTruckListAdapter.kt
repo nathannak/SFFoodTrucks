@@ -10,9 +10,9 @@ import com.demo.sffoodtrucks.model.FoodTruckItem
 
 class FoodTruckListAdapter(var acronymList: ArrayList<FoodTruckItem>) : RecyclerView.Adapter<FoodTruckListAdapter.FoodTruckViewHolder>() {
 
-    fun updateFoodTruckList(newacronymList: ArrayList<FoodTruckItem>) {
+    fun updateFoodTruckList(newfoodTruckList: ArrayList<FoodTruckItem>) {
         acronymList.clear()
-        acronymList.addAll(newacronymList)
+        acronymList.addAll(newfoodTruckList)
         notifyDataSetChanged()
     }
 

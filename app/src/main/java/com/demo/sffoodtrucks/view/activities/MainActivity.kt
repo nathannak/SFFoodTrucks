@@ -41,16 +41,16 @@ class MainActivity : AppCompatActivity() {
             listener = object : ToolbarButtonClickListener {
                 override fun onButtonClicked(destination: String) {
                     when(destination) {
-                        "List" -> {
+                        "Map" -> {
                             Toast.makeText(applicationContext, "GO TO MAP", Toast.LENGTH_LONG).show()
 
-                            curFragment = "Map"
+                            curFragment = "List"
                             navController.navigate(R.id.action_listFragment_to_mapsFragment)
                         }
-                        "Map" -> {
+                        "List" -> {
                             Toast.makeText(applicationContext, "GO TO LIST", Toast.LENGTH_LONG).show()
 
-                            curFragment = "List"
+                            curFragment = "Map"
                             navController.navigate(R.id.action_mapsFragment_to_listFragment)
                         }
                     }
