@@ -7,34 +7,56 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.demo.sffoodtrucks.R
+import com.demo.sffoodtrucks.databinding.FragmentListBinding
+import com.demo.sffoodtrucks.model.FoodTruckItem
+import com.demo.sffoodtrucks.view.FoodTruckListAdapter
 import com.demo.sffoodtrucks.viewmodel.SharedViewModel
 
 class ListFragment : Fragment() {
 
     lateinit var sharedViewModel : SharedViewModel
+    private lateinit var fragmentListBinding : FragmentListBinding
+    private val foodTruckListAdapter = FoodTruckListAdapter(arrayListOf())
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
         sharedViewModel = ViewModelProvider(this).get(SharedViewModel::class.java)
-        sharedViewModel.getOpenFoodTrucks()
+        sharedViewModel.updateOpenFoodTrucks()
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view =  inflater.inflate(R.layout.fragment_list, container, false)
+
+        fragmentListBinding = DataBindingUtil.inflate(
+            inflater, R.layout.fragment_list, container, false
+        )
+        val view: View = fragmentListBinding.getRoot()
+
         setupObservers()
+        setupRecView()
+
         return view
+    }
+
+    private fun setupRecView() {
+        fragmentListBinding.listFragmentRecview.apply {
+            layoutManager = LinearLayoutManager(context)
+            adapter = foodTruckListAdapter
+        }
     }
 
     private fun setupObservers() {
         sharedViewModel.openFoodTrucksLiveData.observe(viewLifecycleOwner, Observer { fti ->
             if(fti.size>0){
-                Toast.makeText(context,"dcd",Toast.LENGTH_LONG).show()
+                Toast.makeText(context,"got response",Toast.LENGTH_LONG).show()
+                foodTruckListAdapter.updateFoodTruckList(fti as ArrayList<FoodTruckItem>)
             }
         })
     }

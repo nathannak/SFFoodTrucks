@@ -1,6 +1,6 @@
 package com.demo.sffoodtrucks.repository
 
-import model.FoodTruck
+import com.demo.sffoodtrucks.model.FoodTruck
 import retrofit2.Response
 import retrofit2.http.GET
 

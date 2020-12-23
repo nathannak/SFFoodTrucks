@@ -5,10 +5,6 @@
 
     <data>
 
-<!--        <variable-->
-<!--            name="sharedViewModel"-->
-<!--            type="com.demo.sffoodtrucks.viewmodel.SharedViewModel" />-->
-
         <variable
             name="listener"
             type="com.demo.sffoodtrucks.view.listeners.ToolbarButtonClickListener" />

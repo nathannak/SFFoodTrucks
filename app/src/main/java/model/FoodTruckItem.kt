@@ -1,4 +1,4 @@
-package model
+package com.demo.sffoodtrucks.model
 
 data class FoodTruckItem(
     val addr_date_create: String,

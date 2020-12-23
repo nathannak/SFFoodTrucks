@@ -1,7 +1,7 @@
 package com.demo.sffoodtrucks.repository
 
 import androidx.lifecycle.MutableLiveData
-import model.FoodTruck
+import com.demo.sffoodtrucks.model.FoodTruck
 
 class Repository {
 

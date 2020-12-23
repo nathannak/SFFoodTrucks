@@ -3,10 +3,10 @@ package com.demo.sffoodtrucks.viewmodel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.demo.sffoodtrucks.model.FoodTruck
+import com.demo.sffoodtrucks.model.FoodTruckItem
 import com.demo.sffoodtrucks.repository.Repository
 import kotlinx.coroutines.launch
-import model.FoodTruck
-import model.FoodTruckItem
 
 class SharedViewModel : ViewModel() {
 
@@ -19,7 +19,7 @@ class SharedViewModel : ViewModel() {
     var foodTruckLiveData: MutableLiveData<FoodTruck> = MutableLiveData()
     var openFoodTrucksLiveData: MutableLiveData<List<FoodTruckItem>> = MutableLiveData()
 
-    fun getOpenFoodTrucks() {
+    fun updateOpenFoodTrucks() {
         viewModelScope.launch {
             foodTruckLiveData.value = repo.getAllFoodTrucks().value
 
