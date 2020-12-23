@@ -1,4 +1,4 @@
-package com.demo.sffoodtrucks.view
+package com.demo.sffoodtrucks.view.activities
 
 import android.os.Bundle
 import android.widget.Toast
@@ -9,6 +9,7 @@ import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import com.demo.sffoodtrucks.R
 import com.demo.sffoodtrucks.databinding.ActivityMainBinding
+import com.demo.sffoodtrucks.view.listeners.ToolbarButtonClickListener
 import com.demo.sffoodtrucks.viewmodel.SharedViewModel
 
 class MainActivity : AppCompatActivity() {

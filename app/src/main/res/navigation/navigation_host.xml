@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/listFragment"
-        android:name="com.demo.sffoodtrucks.view.ListFragment"
+        android:name="com.demo.sffoodtrucks.view.fragments.ListFragment"
         android:label="fragment_list"
         tools:layout="@layout/fragment_list" >
         <action
@@ -16,7 +16,7 @@
     </fragment>
     <fragment
         android:id="@+id/mapsFragment"
-        android:name="com.demo.sffoodtrucks.view.MapsFragment"
+        android:name="com.demo.sffoodtrucks.view.fragments.MapsFragment"
         android:label="fragment_maps"
         tools:layout="@layout/fragment_maps" >
         <action
