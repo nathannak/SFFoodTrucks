@@ -23,6 +23,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         sharedViewModel = ViewModelProvider(this).get(SharedViewModel::class.java)
+
         binding = DataBindingUtil.setContentView(this,R.layout.activity_main)
         navController = Navigation.findNavController(this,R.id.navhost_fragment)
         AndroidThreeTen.init(this);

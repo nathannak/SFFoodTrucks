@@ -5,9 +5,11 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 object FoodTrucksService {
 
+    private const val BASE_URL = "https://data.sfgov.org/resource/"
+
     fun getRetrofit(): FoodTrucksApi {
         return Retrofit.Builder()
-            .baseUrl("https://data.sfgov.org/resource/")
+            .baseUrl(BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create(FoodTrucksApi::class.java)

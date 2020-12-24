@@ -1,4 +1,4 @@
-package com.demo.sffoodtrucks.view
+package com.demo.sffoodtrucks.view.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

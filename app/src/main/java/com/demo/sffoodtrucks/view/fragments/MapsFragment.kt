@@ -1,34 +1,32 @@
 package com.demo.sffoodtrucks.view.fragments
 
-import androidx.fragment.app.Fragment
-
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import com.demo.sffoodtrucks.R
-
+import com.demo.sffoodtrucks.viewmodel.SharedViewModel
 import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.LatLngBounds
+import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
+
 
 class MapsFragment : Fragment() {
 
+    private lateinit var sharedViewModel : SharedViewModel
+
     private val callback = OnMapReadyCallback { googleMap ->
-        /**
-         * Manipulates the map once available.
-         * This callback is triggered when the map is ready to be used.
-         * This is where we can add markers or lines, add listeners or move the camera.
-         * In this case, we just add a marker near Sydney, Australia.
-         * If Google Play services is not installed on the device, the user will be prompted to
-         * install it inside the SupportMapFragment. This method will only be triggered once the
-         * user has installed Google Play services and returned to the app.
-         */
-        val sydney = LatLng(-34.0, 151.0)
-        googleMap.addMarker(MarkerOptions().position(sydney).title("Marker in Sydney"))
-        googleMap.moveCamera(CameraUpdateFactory.newLatLng(sydney))
+        setUpMarkerObserver(googleMap)
     }
 
     override fun onCreateView(
@@ -44,4 +42,41 @@ class MapsFragment : Fragment() {
         val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment?
         mapFragment?.getMapAsync(callback)
     }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        sharedViewModel = ViewModelProvider(requireActivity()).get(SharedViewModel::class.java)
+    }
+
+    private fun setUpMarkerObserver(googleMap: GoogleMap) {
+
+        sharedViewModel.openFoodTrucksLiveData.observe(viewLifecycleOwner, Observer {
+
+            val builder = LatLngBounds.Builder();
+
+            it.forEach {
+
+                val latLng = LatLng(it.latitude.toDouble(), it.longitude.toDouble())
+                val markerOptions = MarkerOptions().position(latLng).title(it.applicant)
+                googleMap.addMarker(markerOptions)
+                builder.include(latLng)
+
+                googleMap.setOnMarkerClickListener(object : GoogleMap.OnMarkerClickListener  {
+                    override fun onMarkerClick(p0: Marker?): Boolean {
+                        Toast.makeText(context,p0?.title,Toast.LENGTH_LONG).show()
+                        return false
+                    }
+                })
+
+                //googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 12f))
+            }.also {
+                val bounds = builder.build();
+                val padding: Int = 100
+                val cu = CameraUpdateFactory.newLatLngBounds(bounds, padding)
+                googleMap.animateCamera(cu);
+            }
+
+        })
+    }
+
 }

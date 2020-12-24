@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.demo.sffoodtrucks.R
 import com.demo.sffoodtrucks.databinding.FragmentListBinding
 import com.demo.sffoodtrucks.model.FoodTruckItem
-import com.demo.sffoodtrucks.view.FoodTruckListAdapter
+import com.demo.sffoodtrucks.view.adapters.FoodTruckListAdapter
 import com.demo.sffoodtrucks.viewmodel.SharedViewModel
 
 class ListFragment : Fragment() {
@@ -25,7 +25,7 @@ class ListFragment : Fragment() {
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        sharedViewModel = ViewModelProvider(this).get(SharedViewModel::class.java)
+        sharedViewModel = ViewModelProvider(requireActivity()).get(SharedViewModel::class.java)
         sharedViewModel.updateOpenFoodTrucks()
     }
 
@@ -47,13 +47,18 @@ class ListFragment : Fragment() {
 
     private fun setupObservers() {
 
-        sharedViewModel.wrapper.observe(viewLifecycleOwner, { netwrokResponseWrapper ->
+        sharedViewModel.networkResponseWrapper.observe(viewLifecycleOwner, { netwrokResponseWrapper ->
             when (netwrokResponseWrapper.state) {
 
-                "loading" -> Toast.makeText(context, "loading", Toast.LENGTH_LONG).show()
+                "loading" -> {
+                    Toast.makeText(context, "loading", Toast.LENGTH_LONG).show()
+
+                    fragmentListBinding.progressBar.visibility = View.VISIBLE
+                }
                 "success" -> {
                     Toast.makeText(context, "success", Toast.LENGTH_LONG).show()
 
+                    fragmentListBinding.progressBar.visibility = View.INVISIBLE
                     sharedViewModel.openFoodTrucksLiveData.observe(viewLifecycleOwner, Observer { fti ->
                         foodTruckListAdapter.updateFoodTruckList(fti as ArrayList<FoodTruckItem>)
                     })

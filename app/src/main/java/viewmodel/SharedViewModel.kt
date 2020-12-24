@@ -24,20 +24,20 @@ class SharedViewModel : ViewModel() {
     Sets and gets network response in wrapped state so we can observe
     and react upon it the list fragment
     */
-    var wrapper: MutableLiveData<NetworkResponseWrapper> = MutableLiveData()
+    var networkResponseWrapper: MutableLiveData<NetworkResponseWrapper> = MutableLiveData()
     var openFoodTrucksLiveData: MutableLiveData<List<FoodTruckItem>> = MutableLiveData()
 
     fun updateOpenFoodTrucks() {
 
         //set network wrapper state to loading first
-        wrapper.value =
+        networkResponseWrapper.value =
             NetworkResponseWrapper(null, "loading")
 
         viewModelScope.launch {
 
             //set network state from loading to success or error
             val responseWrapper = repo.getAllFoodTrucks()
-            wrapper.value = responseWrapper
+            networkResponseWrapper.value = responseWrapper
 
             if (responseWrapper.state == "success") {
                 openFoodTrucksLiveData.postValue(filterOpenFoodTrucks(responseWrapper))
@@ -48,7 +48,8 @@ class SharedViewModel : ViewModel() {
 
     private fun filterOpenFoodTrucks(responseWrapper: NetworkResponseWrapper): List<FoodTruckItem>? {
         return responseWrapper.allFoodTrucksLiveData?.value?.filter { fti ->
-            isFoodTruckOpen(fti)
+            //isFoodTruckOpen(fti)
+            true
         }
     }
 
