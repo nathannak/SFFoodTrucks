@@ -11,19 +11,21 @@ import com.demo.sffoodtrucks.R
 import com.demo.sffoodtrucks.databinding.ActivityMainBinding
 import com.demo.sffoodtrucks.view.listeners.ToolbarButtonClickListener
 import com.demo.sffoodtrucks.viewmodel.SharedViewModel
+import com.jakewharton.threetenabp.AndroidThreeTen
 
 class MainActivity : AppCompatActivity() {
 
     lateinit var binding : ActivityMainBinding
     lateinit var navController : NavController
-    lateinit var mainSharedViewModel : SharedViewModel
+    lateinit var sharedViewModel : SharedViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        mainSharedViewModel = ViewModelProvider(this).get(SharedViewModel::class.java)
+        sharedViewModel = ViewModelProvider(this).get(SharedViewModel::class.java)
         binding = DataBindingUtil.setContentView(this,R.layout.activity_main)
         navController = Navigation.findNavController(this,R.id.navhost_fragment)
+        AndroidThreeTen.init(this);
 
         setupCurrentFragmentName(binding)
         setupToolbarTextListener(binding)
@@ -31,7 +33,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun setupCurrentFragmentName(binding: ActivityMainBinding) {
         binding.apply {
-            curFragment = mainSharedViewModel.currentFragment
+            curFragment = sharedViewModel.currentFragment
         }
     }
 

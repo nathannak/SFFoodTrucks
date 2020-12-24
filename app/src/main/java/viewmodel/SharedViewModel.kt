@@ -5,18 +5,14 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.demo.sffoodtrucks.model.FoodTruckItem
 import com.demo.sffoodtrucks.repository.Repository
-import com.demo.sffoodtrucks.view.util.NetworkResponseWrapper
+import com.demo.sffoodtrucks.util.DateTimeHelper
+import com.demo.sffoodtrucks.util.NetworkResponseWrapper
 import kotlinx.coroutines.launch
-import java.util.function.ToDoubleBiFunction
+import java.util.*
 
 class SharedViewModel : ViewModel() {
 
-
-    /*
-    Sets and gets network response in wrapped state so we can observe
-    and react upon it the list fragment
-     */
-    var wrapper : MutableLiveData<NetworkResponseWrapper> = MutableLiveData()
+    private val repo: Repository = Repository()
 
     /*
     helps project current fragment's name
@@ -24,7 +20,11 @@ class SharedViewModel : ViewModel() {
     */
     var currentFragment: String = "Map"
 
-    val repo: Repository = Repository()
+    /*
+    Sets and gets network response in wrapped state so we can observe
+    and react upon it the list fragment
+    */
+    var wrapper: MutableLiveData<NetworkResponseWrapper> = MutableLiveData()
     var openFoodTrucksLiveData: MutableLiveData<List<FoodTruckItem>> = MutableLiveData()
 
     fun updateOpenFoodTrucks() {
@@ -35,22 +35,33 @@ class SharedViewModel : ViewModel() {
 
         viewModelScope.launch {
 
+            //set network state from loading to success or error
             val responseWrapper = repo.getAllFoodTrucks()
             wrapper.value = responseWrapper
 
-            val openFoodTrucks = responseWrapper.allFoodTrucksLiveData?.value?.filter { fti ->
-
-                //isFoodTruckOpen(fti)
-                fti.starttime == "8AM"
-
+            if (responseWrapper.state == "success") {
+                openFoodTrucksLiveData.postValue(filterOpenFoodTrucks(responseWrapper))
             }
 
-            openFoodTrucksLiveData.postValue(openFoodTrucks)
         }
     }
 
-    private fun isFoodTruckOpen(fti: FoodTruckItem): Boolean {
-        TODO()
+    private fun filterOpenFoodTrucks(responseWrapper: NetworkResponseWrapper): List<FoodTruckItem>? {
+        return responseWrapper.allFoodTrucksLiveData?.value?.filter { fti ->
+            isFoodTruckOpen(fti)
+        }
+    }
+
+    private fun isFoodTruckOpen(foodTruckItem: FoodTruckItem): Boolean {
+        val dateTime = DateTimeHelper()
+        return (
+           dateTime.getCurDay().toLowerCase(Locale.getDefault()).equals(foodTruckItem.dayofweekstr.toLowerCase(
+           Locale.getDefault())
+           ) &&
+           dateTime.getCurHour() <  foodTruckItem.end24.substring(0,2).toInt()
+           &&
+           dateTime.getCurHour() >=  foodTruckItem.start24.substring(0,2).toInt()
+        )
     }
 
 }

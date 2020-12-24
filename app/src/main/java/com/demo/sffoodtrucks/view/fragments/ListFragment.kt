@@ -47,12 +47,13 @@ class ListFragment : Fragment() {
 
     private fun setupObservers() {
 
-        sharedViewModel.wrapper.observe(viewLifecycleOwner, Observer { netwrokResponseWrapper ->
+        sharedViewModel.wrapper.observe(viewLifecycleOwner, { netwrokResponseWrapper ->
             when (netwrokResponseWrapper.state) {
 
                 "loading" -> Toast.makeText(context, "loading", Toast.LENGTH_LONG).show()
                 "success" -> {
                     Toast.makeText(context, "success", Toast.LENGTH_LONG).show()
+
                     sharedViewModel.openFoodTrucksLiveData.observe(viewLifecycleOwner, Observer { fti ->
                         foodTruckListAdapter.updateFoodTruckList(fti as ArrayList<FoodTruckItem>)
                     })

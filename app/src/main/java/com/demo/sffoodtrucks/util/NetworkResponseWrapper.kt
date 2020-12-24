@@ -1,4 +1,4 @@
-package com.demo.sffoodtrucks.view.util
+package com.demo.sffoodtrucks.util
 
 import androidx.lifecycle.MutableLiveData
 import com.demo.sffoodtrucks.model.FoodTruck

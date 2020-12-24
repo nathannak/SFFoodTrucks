@@ -2,7 +2,7 @@ package com.demo.sffoodtrucks.repository
 
 import androidx.lifecycle.MutableLiveData
 import com.demo.sffoodtrucks.model.FoodTruck
-import com.demo.sffoodtrucks.view.util.NetworkResponseWrapper
+import com.demo.sffoodtrucks.util.NetworkResponseWrapper
 
 class Repository {
 
