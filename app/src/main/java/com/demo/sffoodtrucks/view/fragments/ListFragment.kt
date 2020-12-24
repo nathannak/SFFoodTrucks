@@ -66,6 +66,9 @@ class ListFragment : Fragment() {
                 "error" -> {
 
                 }
+                "empty" ->{
+                    Toast.makeText(context, "no results", Toast.LENGTH_LONG).show()
+                }
             }
         })
     }

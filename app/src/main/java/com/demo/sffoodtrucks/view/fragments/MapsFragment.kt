@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.FrameLayout
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -30,7 +29,7 @@ class MapsFragment : Fragment() {
     private lateinit var mapsFragmentBinding : FragmentMapsBinding
 
     private val callback = OnMapReadyCallback { googleMap ->
-        setUpMarkerObserver(googleMap)
+        populateMarkers(googleMap)
     }
 
     override fun onCreateView(
@@ -38,20 +37,11 @@ class MapsFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
         mapsFragmentBinding = DataBindingUtil.inflate(
             inflater, R.layout.fragment_maps, container, false
         )
-
-        mapsFragmentBinding.dummyImageView.setOnClickListener(object : View.OnClickListener{
-            override fun onClick(v: View?) {
-                mapsFragmentBinding.mapsSingleLayout.visibility = View.INVISIBLE
-
-            }
-
-        })
+        setupPopUpDismissListener()
         return mapsFragmentBinding.getRoot()
-
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -65,53 +55,62 @@ class MapsFragment : Fragment() {
         sharedViewModel = ViewModelProvider(requireActivity()).get(SharedViewModel::class.java)
     }
 
-    private fun setUpMarkerObserver(googleMap: GoogleMap) {
+    private fun populateMarkers(googleMap: GoogleMap) {
 
         sharedViewModel.openFoodTrucksLiveData.observe(viewLifecycleOwner, Observer {
 
-            val builder = LatLngBounds.Builder();
+            if(it.size == 0 ) {
 
-            it.forEach {
+                Toast.makeText(context,"no results to show",Toast.LENGTH_LONG).show()
+                googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(LatLng(37.77,-122.41), 12f))
 
-                val latLng = LatLng(it.latitude.toDouble(), it.longitude.toDouble())
-                val markerOptions =
-                    MarkerOptions().position(latLng).title(it.applicant).snippet(it.location)
-                googleMap.addMarker(markerOptions)
-                builder.include(latLng)
+            }else {
 
-                //googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 12f))
-            }.also {
+                val builder = LatLngBounds.Builder();
+                it.forEach {
 
-                val bounds = builder.build();
-                val padding = 100
-                val cu = CameraUpdateFactory.newLatLngBounds(bounds, padding)
-                googleMap.animateCamera(cu);
+                    val latLng = LatLng(it.latitude.toDouble(), it.longitude.toDouble())
+                    val markerOptions =
+                        MarkerOptions().position(latLng).title(it.applicant).snippet(it.location)
+                    googleMap.addMarker(markerOptions)
+                    builder.include(latLng)
+                }.also {
 
-                googleMap.setOnMarkerClickListener(object : GoogleMap.OnMarkerClickListener {
-                    override fun onMarkerClick(marker: Marker?): Boolean {
-
-                        Toast.makeText(context, marker?.title + marker?.snippet, Toast.LENGTH_SHORT)
-                            .show()
-
-                        mapsFragmentBinding.mapsSingleLayout.visibility = View.VISIBLE
-
-                        val inflatedLayout: View =
-                            layoutInflater.inflate(R.layout.item_truck, null, false)
-                        inflatedLayout.fti_name.setText(marker?.snippet)
-                        mapsFragmentBinding.container.addView(inflatedLayout)
-
-                        //mapsFragmentBinding.mapsSingleLayout.visibility = View.INVISIBLE
-
-                        return false
-                    }
-                })
-
+                    val bounds = builder.build();
+                    val padding = 100
+                    val cameraFactory = CameraUpdateFactory.newLatLngBounds(bounds, padding)
+                    googleMap.animateCamera(cameraFactory);
+                    setupMarkerListener(googleMap)
+                }
             }
         })
     }
 
+    private fun setupMarkerListener(googleMap: GoogleMap) {
+        googleMap.setOnMarkerClickListener(object : GoogleMap.OnMarkerClickListener {
+            override fun onMarkerClick(marker: Marker?): Boolean {
 
+                mapsFragmentBinding.mapsSingleLayout.visibility = View.VISIBLE
 
+                //re-use layout from recyclerview
+                val inflatedLayout: View =
+                    layoutInflater.inflate(R.layout.item_truck, null, false)
+                inflatedLayout.fti_name.text = marker?.snippet
+                mapsFragmentBinding.container.addView(inflatedLayout)
 
+                return false
+            }
+        })
+    }
+
+    private fun setupPopUpDismissListener() {
+        mapsFragmentBinding.dummyImageView.setOnClickListener(object : View.OnClickListener {
+            override fun onClick(v: View?) {
+                mapsFragmentBinding.mapsSingleLayout.visibility = View.INVISIBLE
+
+            }
+
+        })
+    }
 
 }

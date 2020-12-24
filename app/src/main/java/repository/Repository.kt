@@ -7,14 +7,14 @@ import com.demo.sffoodtrucks.util.NetworkResponseWrapper
 class Repository {
 
     suspend fun getAllFoodTrucks(): NetworkResponseWrapper {
-            val response = FoodTrucksService.getRetrofit().getFoodTrucks()
+        val response = FoodTrucksService.getRetrofit().getFoodTrucks()
 
-            if(response.isSuccessful){
-                val repoFoodTruckLiveData : MutableLiveData<FoodTruck> = MutableLiveData()
-                repoFoodTruckLiveData.value = response.body()
-                return NetworkResponseWrapper(repoFoodTruckLiveData,"success")
-            }
-            else return NetworkResponseWrapper(null,"error")
+        if(response.isSuccessful){
+            val repoFoodTruckLiveData : MutableLiveData<FoodTruck> = MutableLiveData()
+            repoFoodTruckLiveData.value = response.body()
+            return NetworkResponseWrapper(repoFoodTruckLiveData,"success")
+        }
+        else return NetworkResponseWrapper(null,"error")
     }
 
 }

@@ -40,29 +40,33 @@ class SharedViewModel : ViewModel() {
             networkResponseWrapper.value = responseWrapper
 
             if (responseWrapper.state == "success") {
-                openFoodTrucksLiveData.postValue(filterOpenFoodTrucks(responseWrapper))
-            }
 
+                val list = filterOpenFoodTrucks(responseWrapper)
+                openFoodTrucksLiveData.postValue(list)
+
+                //empty response case, when all trucks are closed.
+                if(list?.size!! ==  0)
+                    networkResponseWrapper.value = NetworkResponseWrapper(null,"empty")
+            }
         }
     }
 
     private fun filterOpenFoodTrucks(responseWrapper: NetworkResponseWrapper): List<FoodTruckItem>? {
         return responseWrapper.allFoodTrucksLiveData?.value?.filter { fti ->
-            //isFoodTruckOpen(fti)
-            true
+            isFoodTruckOpen(fti)
         }
     }
 
     private fun isFoodTruckOpen(foodTruckItem: FoodTruckItem): Boolean {
         val dateTime = DateTimeHelper()
         return (
-           dateTime.getCurDay().toLowerCase(Locale.getDefault()).equals(foodTruckItem.dayofweekstr.toLowerCase(
-           Locale.getDefault())
-           ) &&
-           dateTime.getCurHour() <  foodTruckItem.end24.substring(0,2).toInt()
-           &&
-           dateTime.getCurHour() >=  foodTruckItem.start24.substring(0,2).toInt()
-        )
+                dateTime.getCurDay().toLowerCase(Locale.getDefault()).equals(foodTruckItem.dayofweekstr.toLowerCase(
+                    Locale.getDefault())
+                ) &&
+                        dateTime.getCurHour() <  foodTruckItem.end24.substring(0,2).toInt()
+                        &&
+                        dateTime.getCurHour() >=  foodTruckItem.start24.substring(0,2).toInt()
+                )
     }
 
 }
