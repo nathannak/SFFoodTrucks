@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <FrameLayout
@@ -11,14 +12,41 @@
             android:id="@+id/map"
             android:name="com.google.android.gms.maps.SupportMapFragment"
             android:layout_width="match_parent"
-            android:layout_height="741dp"
+            android:layout_height="match_parent"
             tools:context=".view.fragments.MapsFragment" />
 
-        <FrameLayout
-            android:id="@+id/container"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/maps_single_layout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom" />
+            android:layout_height="match_parent"
+            android:visibility="invisible">
+
+            <ImageView
+                android:id="@+id/dummy_image_view"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:background="@color/common_google_signin_btn_tint"
+                android:contentDescription="@string/click_here_to_dismiss_the_pop_up"
+                app:layout_constraintBottom_toTopOf="@+id/container"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <FrameLayout
+                android:id="@+id/container"
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                android:layout_gravity="bottom"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/dummy_image_view"
+                app:layout_constraintVertical_bias="0.0" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
 
     </FrameLayout>
 

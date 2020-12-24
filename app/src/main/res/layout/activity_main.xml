@@ -22,8 +22,8 @@
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
-            android:layout_width="410dp"
-            android:layout_height="56dp"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
             android:background="?attr/colorPrimary"
             android:minHeight="?attr/actionBarSize"
             android:theme="?attr/actionBarTheme"
@@ -37,6 +37,7 @@
                 android:id="@+id/toolbar_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textSize="20sp"
                 android:layout_gravity="end"
                 android:textColor="@color/white"
                 android:paddingEnd="20dp"
@@ -51,8 +52,8 @@
         <fragment
             android:id="@+id/navhost_fragment"
             android:name="androidx.navigation.fragment.NavHostFragment"
-            android:layout_width="409dp"
-            android:layout_height="673dp"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
             app:defaultNavHost="true"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

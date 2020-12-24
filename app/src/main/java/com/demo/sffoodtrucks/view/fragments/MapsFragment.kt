@@ -42,6 +42,14 @@ class MapsFragment : Fragment() {
         mapsFragmentBinding = DataBindingUtil.inflate(
             inflater, R.layout.fragment_maps, container, false
         )
+
+        mapsFragmentBinding.dummyImageView.setOnClickListener(object : View.OnClickListener{
+            override fun onClick(v: View?) {
+                mapsFragmentBinding.mapsSingleLayout.visibility = View.INVISIBLE
+
+            }
+
+        })
         return mapsFragmentBinding.getRoot()
 
     }
@@ -81,14 +89,18 @@ class MapsFragment : Fragment() {
 
                 googleMap.setOnMarkerClickListener(object : GoogleMap.OnMarkerClickListener {
                     override fun onMarkerClick(marker: Marker?): Boolean {
-                        Toast.makeText(context, marker?.title + marker?.snippet, Toast.LENGTH_LONG)
+
+                        Toast.makeText(context, marker?.title + marker?.snippet, Toast.LENGTH_SHORT)
                             .show()
+
+                        mapsFragmentBinding.mapsSingleLayout.visibility = View.VISIBLE
 
                         val inflatedLayout: View =
                             layoutInflater.inflate(R.layout.item_truck, null, false)
                         inflatedLayout.fti_name.setText(marker?.snippet)
                         mapsFragmentBinding.container.addView(inflatedLayout)
-//                        container.addView(inflatedLayout)
+
+                        //mapsFragmentBinding.mapsSingleLayout.visibility = View.INVISIBLE
 
                         return false
                     }
@@ -97,6 +109,8 @@ class MapsFragment : Fragment() {
             }
         })
     }
+
+
 
 
 

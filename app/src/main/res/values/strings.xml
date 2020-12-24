@@ -2,4 +2,5 @@
     <string name="app_name">SF Food Trucks</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="click_here_to_dismiss_the_pop_up">click here to dismiss the pop-up</string>
 </resources>
