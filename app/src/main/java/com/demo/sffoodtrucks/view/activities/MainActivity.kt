@@ -47,14 +47,15 @@ class MainActivity : AppCompatActivity() {
                         "Map" -> {
                             Toast.makeText(applicationContext, "GO TO MAP", Toast.LENGTH_LONG).show()
 
-                            curFragment = "List"
+
                             navController.navigate(R.id.action_listFragment_to_mapsFragment)
+                            curFragment = "List"
                         }
                         "List" -> {
                             Toast.makeText(applicationContext, "GO TO LIST", Toast.LENGTH_LONG).show()
 
-                            curFragment = "Map"
                             navController.navigate(R.id.action_mapsFragment_to_listFragment)
+                            curFragment = "Map"
                         }
                     }
                 }
@@ -62,4 +63,12 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    override fun onBackPressed() {
+        super.onBackPressed()
+        /*
+        since there is a button in toolbar to navigate
+        back button does not need to do the same
+        */
+        finish()
+    }
 }

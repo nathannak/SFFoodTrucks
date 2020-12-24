@@ -5,11 +5,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.FrameLayout
 import android.widget.Toast
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.demo.sffoodtrucks.R
+import com.demo.sffoodtrucks.databinding.FragmentMapsBinding
 import com.demo.sffoodtrucks.viewmodel.SharedViewModel
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -19,11 +22,12 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.LatLngBounds
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
-
+import kotlinx.android.synthetic.main.item_truck.view.*
 
 class MapsFragment : Fragment() {
 
     private lateinit var sharedViewModel : SharedViewModel
+    private lateinit var mapsFragmentBinding : FragmentMapsBinding
 
     private val callback = OnMapReadyCallback { googleMap ->
         setUpMarkerObserver(googleMap)
@@ -34,7 +38,12 @@ class MapsFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_maps, container, false)
+
+        mapsFragmentBinding = DataBindingUtil.inflate(
+            inflater, R.layout.fragment_maps, container, false
+        )
+        return mapsFragmentBinding.getRoot()
+
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -57,26 +66,38 @@ class MapsFragment : Fragment() {
             it.forEach {
 
                 val latLng = LatLng(it.latitude.toDouble(), it.longitude.toDouble())
-                val markerOptions = MarkerOptions().position(latLng).title(it.applicant)
+                val markerOptions =
+                    MarkerOptions().position(latLng).title(it.applicant).snippet(it.location)
                 googleMap.addMarker(markerOptions)
                 builder.include(latLng)
 
-                googleMap.setOnMarkerClickListener(object : GoogleMap.OnMarkerClickListener  {
-                    override fun onMarkerClick(p0: Marker?): Boolean {
-                        Toast.makeText(context,p0?.title,Toast.LENGTH_LONG).show()
+                //googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 12f))
+            }.also {
+
+                val bounds = builder.build();
+                val padding = 100
+                val cu = CameraUpdateFactory.newLatLngBounds(bounds, padding)
+                googleMap.animateCamera(cu);
+
+                googleMap.setOnMarkerClickListener(object : GoogleMap.OnMarkerClickListener {
+                    override fun onMarkerClick(marker: Marker?): Boolean {
+                        Toast.makeText(context, marker?.title + marker?.snippet, Toast.LENGTH_LONG)
+                            .show()
+
+                        val inflatedLayout: View =
+                            layoutInflater.inflate(R.layout.item_truck, null, false)
+                        inflatedLayout.fti_name.setText(marker?.snippet)
+                        mapsFragmentBinding.container.addView(inflatedLayout)
+//                        container.addView(inflatedLayout)
+
                         return false
                     }
                 })
 
-                //googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 12f))
-            }.also {
-                val bounds = builder.build();
-                val padding: Int = 100
-                val cu = CameraUpdateFactory.newLatLngBounds(bounds, padding)
-                googleMap.animateCamera(cu);
             }
-
         })
     }
+
+
 
 }
