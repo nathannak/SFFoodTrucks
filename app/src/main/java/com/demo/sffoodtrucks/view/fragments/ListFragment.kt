@@ -26,7 +26,11 @@ class ListFragment : Fragment() {
     override fun onAttach(context: Context) {
         super.onAttach(context)
         sharedViewModel = ViewModelProvider(requireActivity()).get(SharedViewModel::class.java)
-        sharedViewModel.updateOpenFoodTrucks()
+
+        if(sharedViewModel.openFoodTrucksLiveData.value?.isEmpty()!!){
+            sharedViewModel.updateOpenFoodTrucks()
+        }
+
     }
 
     override fun onCreateView(
@@ -50,13 +54,11 @@ class ListFragment : Fragment() {
             when (netwrokResponseWrapper.state) {
 
                 "loading" -> {
-                    Toast.makeText(context, "loading", Toast.LENGTH_LONG).show()
+                    Toast.makeText(context, "loading", Toast.LENGTH_SHORT).show()
 
                     fragmentListBinding.progressBar.visibility = View.VISIBLE
                 }
                 "success" -> {
-                    Toast.makeText(context, "success", Toast.LENGTH_LONG).show()
-
                     fragmentListBinding.progressBar.visibility = View.INVISIBLE
                     sharedViewModel.openFoodTrucksLiveData.observe(viewLifecycleOwner, Observer { fti ->
                         foodTruckListAdapter.updateFoodTruckList(fti as ArrayList<FoodTruckItem>)
@@ -66,13 +68,14 @@ class ListFragment : Fragment() {
 
                 }
                 "empty" ->{
-                    Toast.makeText(context, "no results", Toast.LENGTH_LONG).show()
+                    Toast.makeText(context, "no results to show", Toast.LENGTH_SHORT).show()
                 }
             }
         })
     }
 
     private fun setupRecView() {
+
         fragmentListBinding.listFragmentRecview.apply {
             layoutManager = LinearLayoutManager(context)
             adapter = foodTruckListAdapter

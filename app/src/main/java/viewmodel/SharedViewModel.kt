@@ -25,7 +25,7 @@ class SharedViewModel : ViewModel() {
     and react upon it the list fragment
     */
     var networkResponseWrapper: MutableLiveData<NetworkResponseWrapper> = MutableLiveData()
-    var openFoodTrucksLiveData: MutableLiveData<List<FoodTruckItem>> = MutableLiveData()
+    var openFoodTrucksLiveData: MutableLiveData<List<FoodTruckItem>> = MutableLiveData(arrayListOf())
 
     fun updateOpenFoodTrucks() {
 
