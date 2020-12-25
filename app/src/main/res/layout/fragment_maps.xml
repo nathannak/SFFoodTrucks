@@ -22,19 +22,20 @@
             android:visibility="invisible">
 
             <ImageView
-                android:id="@+id/dummy_image_view"
+                android:id="@+id/tint_image_view"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:background="@color/common_google_signin_btn_tint"
+                android:background="@color/black"
+                android:alpha="0.75"
                 android:contentDescription="@string/click_here_to_dismiss_the_pop_up"
-                app:layout_constraintBottom_toTopOf="@+id/container"
+                app:layout_constraintBottom_toTopOf="@+id/truck_information_single"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <FrameLayout
-                android:id="@+id/container"
+                android:id="@+id/truck_information_single"
                 android:layout_width="match_parent"
                 android:layout_height="150dp"
                 android:layout_gravity="bottom"

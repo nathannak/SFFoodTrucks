@@ -57,27 +57,23 @@ class MapsFragment : Fragment() {
 
     private fun populateMarkers(googleMap: GoogleMap) {
 
-        sharedViewModel.openFoodTrucksLiveData.observe(viewLifecycleOwner, Observer {
+        sharedViewModel.openFoodTrucksLiveData.observe(viewLifecycleOwner, {
 
             if(it.size == 0 ) {
-
                 Toast.makeText(context,"no results to show",Toast.LENGTH_LONG).show()
                 googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(LatLng(37.77,-122.41), 12f))
-
             }else {
-
                 val builder = LatLngBounds.Builder();
                 it.forEach {
 
                     val latLng = LatLng(it.latitude.toDouble(), it.longitude.toDouble())
-                    val markerOptions =
-                        MarkerOptions().position(latLng).title(it.applicant).snippet(it.location)
+                    val markerOptions = MarkerOptions().position(latLng).title(it.applicant).snippet(it.location)
                     googleMap.addMarker(markerOptions)
                     builder.include(latLng)
                 }.also {
 
                     val bounds = builder.build();
-                    val padding = 100
+                    val padding = 200
                     val cameraFactory = CameraUpdateFactory.newLatLngBounds(bounds, padding)
                     googleMap.animateCamera(cameraFactory);
                     setupMarkerListener(googleMap)
@@ -87,30 +83,25 @@ class MapsFragment : Fragment() {
     }
 
     private fun setupMarkerListener(googleMap: GoogleMap) {
-        googleMap.setOnMarkerClickListener(object : GoogleMap.OnMarkerClickListener {
-            override fun onMarkerClick(marker: Marker?): Boolean {
+        googleMap.setOnMarkerClickListener { marker ->
+            mapsFragmentBinding.mapsSingleLayout.visibility = View.VISIBLE
 
-                mapsFragmentBinding.mapsSingleLayout.visibility = View.VISIBLE
+            //re-use layout from recyclerview
+            val inflatedLayout: View =
+                layoutInflater.inflate(R.layout.item_truck, null, false)
+            inflatedLayout.fti_name.text = marker?.snippet
+            mapsFragmentBinding.truckInformationSingle.addView(inflatedLayout)
 
-                //re-use layout from recyclerview
-                val inflatedLayout: View =
-                    layoutInflater.inflate(R.layout.item_truck, null, false)
-                inflatedLayout.fti_name.text = marker?.snippet
-                mapsFragmentBinding.container.addView(inflatedLayout)
-
-                return false
-            }
-        })
+            false
+        }
     }
 
     private fun setupPopUpDismissListener() {
-        mapsFragmentBinding.dummyImageView.setOnClickListener(object : View.OnClickListener {
-            override fun onClick(v: View?) {
-                mapsFragmentBinding.mapsSingleLayout.visibility = View.INVISIBLE
 
-            }
-
-        })
+        //when tint image layer is clicked, hide the pop-u and image
+        mapsFragmentBinding.tintImageView.setOnClickListener {
+            mapsFragmentBinding.mapsSingleLayout.visibility = View.INVISIBLE
+        }
     }
 
 }

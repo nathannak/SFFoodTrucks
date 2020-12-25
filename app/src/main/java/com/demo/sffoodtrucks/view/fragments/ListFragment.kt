@@ -37,12 +37,11 @@ class ListFragment : Fragment() {
         fragmentListBinding = DataBindingUtil.inflate(
             inflater, R.layout.fragment_list, container, false
         )
-        val view: View = fragmentListBinding.getRoot()
 
         setupObservers()
         setupRecView()
 
-        return view
+        return fragmentListBinding.getRoot()
     }
 
     private fun setupObservers() {

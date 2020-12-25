@@ -45,17 +45,19 @@ class MainActivity : AppCompatActivity() {
                 override fun onButtonClicked(destination: String) {
                     when(destination) {
                         "Map" -> {
-                            Toast.makeText(applicationContext, "GO TO MAP", Toast.LENGTH_LONG).show()
-
-
                             navController.navigate(R.id.action_listFragment_to_mapsFragment)
+
+                            /*
+                            One change for DataBinding, another for retaining fragment name in SharedViewModel.
+                            It can't be done via a SharedViewModel databinding variable in xml layout alone.
+                            */
                             curFragment = "List"
+                            sharedViewModel.currentFragment = "List"
                         }
                         "List" -> {
-                            Toast.makeText(applicationContext, "GO TO LIST", Toast.LENGTH_LONG).show()
-
                             navController.navigate(R.id.action_mapsFragment_to_listFragment)
                             curFragment = "Map"
+                            sharedViewModel.currentFragment = "Map"
                         }
                     }
                 }
