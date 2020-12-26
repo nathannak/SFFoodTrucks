@@ -8,18 +8,22 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.demo.sffoodtrucks.R
 import com.demo.sffoodtrucks.databinding.FragmentListBinding
 import com.demo.sffoodtrucks.model.FoodTruckItem
+import com.demo.sffoodtrucks.util.CheckConnectivity
+import com.demo.sffoodtrucks.util.NetworkResponseWrapper
 import com.demo.sffoodtrucks.view.adapters.FoodTruckListAdapter
 import com.demo.sffoodtrucks.viewmodel.SharedViewModel
+import kotlinx.android.synthetic.main.fragment_list.*
 
 class ListFragment : Fragment() {
 
-    lateinit var sharedViewModel : SharedViewModel
+    private lateinit var sharedViewModel : SharedViewModel
     private lateinit var fragmentListBinding : FragmentListBinding
     private val foodTruckListAdapter = FoodTruckListAdapter(arrayListOf())
 
@@ -27,7 +31,11 @@ class ListFragment : Fragment() {
         super.onAttach(context)
         sharedViewModel = ViewModelProvider(requireActivity()).get(SharedViewModel::class.java)
 
-        if(sharedViewModel.openFoodTrucksLiveData.value?.isEmpty()!!){
+        if(sharedViewModel.openFoodTrucksLiveData.value?.isEmpty()!! && !CheckConnectivity(context).isConnected()){
+            sharedViewModel.networkResponseWrapper = MutableLiveData(NetworkResponseWrapper(null,"error"))
+        }
+        //retain state across configuration changes with the help of ViewModel
+        else if (sharedViewModel.openFoodTrucksLiveData.value?.isEmpty()!!){
             sharedViewModel.updateOpenFoodTrucks()
         }
 
@@ -54,11 +62,12 @@ class ListFragment : Fragment() {
             when (netwrokResponseWrapper.state) {
 
                 "loading" -> {
-                    Toast.makeText(context, "loading", Toast.LENGTH_SHORT).show()
 
+                    Toast.makeText(context, "loading", Toast.LENGTH_SHORT).show()
                     fragmentListBinding.progressBar.visibility = View.VISIBLE
                 }
                 "success" -> {
+
                     fragmentListBinding.progressBar.visibility = View.INVISIBLE
                     sharedViewModel.openFoodTrucksLiveData.observe(viewLifecycleOwner, Observer { fti ->
                         foodTruckListAdapter.updateFoodTruckList(fti as ArrayList<FoodTruckItem>)
@@ -66,9 +75,12 @@ class ListFragment : Fragment() {
                 }
                 "error" -> {
 
+                    Toast.makeText(context, "failed to fetch results from network", Toast.LENGTH_LONG).show()
+                    progressBar.visibility=View.INVISIBLE
                 }
                 "empty" ->{
-                    Toast.makeText(context, "no results to show", Toast.LENGTH_SHORT).show()
+
+                    Toast.makeText(context, "no results to show", Toast.LENGTH_LONG).show()
                 }
             }
         })

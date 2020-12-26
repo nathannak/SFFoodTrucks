@@ -10,9 +10,7 @@ import com.demo.sffoodtrucks.util.NetworkResponseWrapper
 import kotlinx.coroutines.launch
 import java.util.*
 
-class SharedViewModel : ViewModel() {
-
-    private val repo: Repository = Repository()
+class SharedViewModel(private val repo: Repository = Repository()) : ViewModel() {
 
     /*
     helps project current fragment's name
@@ -25,7 +23,7 @@ class SharedViewModel : ViewModel() {
     and react upon it the list fragment
     */
     var networkResponseWrapper: MutableLiveData<NetworkResponseWrapper> = MutableLiveData()
-    var openFoodTrucksLiveData: MutableLiveData<List<FoodTruckItem>> = MutableLiveData(arrayListOf())
+    var openFoodTrucksLiveData: MutableLiveData<List<FoodTruckItem>>    = MutableLiveData(arrayListOf())
 
     fun updateOpenFoodTrucks() {
 
