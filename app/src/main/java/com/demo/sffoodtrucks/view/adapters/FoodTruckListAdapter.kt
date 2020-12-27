@@ -8,7 +8,11 @@ import com.demo.sffoodtrucks.R
 import com.demo.sffoodtrucks.databinding.ItemTruckBinding
 import com.demo.sffoodtrucks.model.FoodTruckItem
 
-class FoodTruckListAdapter(var acronymList: ArrayList<FoodTruckItem>) : RecyclerView.Adapter<FoodTruckListAdapter.FoodTruckViewHolder>() {
+/* Written by Nathan N 12/27/2020
+
+*/
+
+class FoodTruckListAdapter(private var acronymList: ArrayList<FoodTruckItem>) : RecyclerView.Adapter<FoodTruckListAdapter.FoodTruckViewHolder>() {
 
     fun updateFoodTruckList(newfoodTruckList: ArrayList<FoodTruckItem>) {
         acronymList.clear()

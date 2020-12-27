@@ -1,11 +1,12 @@
 package com.demo.sffoodtrucks.repository
 
-import android.util.Log
-import android.util.Log.VERBOSE
-import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
 import com.demo.sffoodtrucks.model.FoodTruck
 import com.demo.sffoodtrucks.util.NetworkResponseWrapper
+
+/* Written by Nathan N 12/27/2020
+
+*/
 
 class Repository {
 
@@ -13,8 +14,6 @@ class Repository {
         val response = FoodTrucksService.getRetrofit().getFoodTrucks()
 
         if(response.isSuccessful){
-
-            Log.v("MYTAG","making a network call")
 
             val repoFoodTruckLiveData : MutableLiveData<FoodTruck> = MutableLiveData()
             repoFoodTruckLiveData.value = response.body()

@@ -1,7 +1,6 @@
 package com.demo.sffoodtrucks.view.activities
 
 import android.os.Bundle
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
@@ -13,11 +12,18 @@ import com.demo.sffoodtrucks.view.listeners.ToolbarButtonClickListener
 import com.demo.sffoodtrucks.viewmodel.SharedViewModel
 import com.jakewharton.threetenabp.AndroidThreeTen
 
+/* Written by Nathan N 12/27/2020
+
+Besides normal initialization responsibilities,
+MainActivity is also in charge of managing Toolbar text click,
+Fragment navigation, and communicating correct fragment name in Toolbar.
+*/
+
 class MainActivity : AppCompatActivity() {
 
-    lateinit var binding : ActivityMainBinding
-    lateinit var navController : NavController
-    lateinit var sharedViewModel : SharedViewModel
+    private lateinit var binding : ActivityMainBinding
+    private lateinit var navController : NavController
+    private lateinit var sharedViewModel : SharedViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,7 +55,7 @@ class MainActivity : AppCompatActivity() {
 
                             /*
                             One change for DataBinding, another for retaining fragment name in SharedViewModel.
-                            It can't be done via a SharedViewModel databinding variable in xml layout alone.
+                            It can't be done solely via a SharedViewModel databinding variable in the xml layout.
                             */
                             curFragment = "List"
                             sharedViewModel.currentFragment = "List"

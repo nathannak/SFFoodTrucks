@@ -5,6 +5,9 @@ import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.net.NetworkInfo
 
+/* Written by Nathan N 12/27/2020
+class to check connectivity, covers from Android Lolipop and beyond.
+*/
 
 class CheckConnectivity(private val context: Context) {
 

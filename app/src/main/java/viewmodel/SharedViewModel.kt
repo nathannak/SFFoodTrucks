@@ -10,19 +10,27 @@ import com.demo.sffoodtrucks.util.NetworkResponseWrapper
 import kotlinx.coroutines.launch
 import java.util.*
 
+/* Written by Nathan N 12/27/2020
+
+*/
+
 class SharedViewModel(private val repo: Repository = Repository()) : ViewModel() {
 
     /*
     helps project current fragment's name
-    in Toolbar through DataBinding
+    in Toolbar through DataBinding.
+    We have to expose it to MainActivity
     */
     var currentFragment: String = "Map"
 
     /*
     Sets and gets network response in wrapped state so we can observe
-    and react upon it the list fragment
+    and react upon it the list fragment.
+    We have to expose networkResponseWrapper to ListFragment
     */
     var networkResponseWrapper: MutableLiveData<NetworkResponseWrapper> = MutableLiveData()
+
+    /* We have to expose openFoodTrucksLiveData to ListFragment */
     var openFoodTrucksLiveData: MutableLiveData<List<FoodTruckItem>>    = MutableLiveData(arrayListOf())
 
     fun updateOpenFoodTrucks() {
