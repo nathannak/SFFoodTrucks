@@ -30,7 +30,7 @@ class SharedViewModel(private val repo: Repository = Repository()) : ViewModel()
     */
     var networkResponseWrapper: MutableLiveData<NetworkResponseWrapper> = MutableLiveData()
 
-    /* We have to expose openFoodTrucksLiveData to ListFragment */
+    //We have to expose openFoodTrucksLiveData to ListFragment
     var openFoodTrucksLiveData: MutableLiveData<List<FoodTruckItem>>    = MutableLiveData(arrayListOf())
 
     fun updateOpenFoodTrucks() {

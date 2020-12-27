@@ -5,7 +5,7 @@ import org.threeten.bp.LocalDateTime
 import org.threeten.bp.ZoneId
 
 /* Written by Nathan N 12/27/2020
-Class to help with getting current time and date, covers from Android Lolipop and beyond.
+Class to help with getting current time and date, covers from Android Lollipop and beyond.
 Uses Jake Wharton library 'org.threeten.bp'
 */
 
