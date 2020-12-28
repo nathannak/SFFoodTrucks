@@ -33,7 +33,7 @@ class SharedViewModel(private val repo: Repository = Repository()) : ViewModel()
     //We have to expose openFoodTrucksLiveData to ListFragment
     var openFoodTrucksLiveData: MutableLiveData<List<FoodTruckItem>>    = MutableLiveData(arrayListOf())
 
-    //gets list of open food trucks and sort them
+    //gets list of open food trucks and sort them, also detect if all trucks are closed
     fun updateOpenFoodTrucks() {
 
         //set network wrapper state to loading first
