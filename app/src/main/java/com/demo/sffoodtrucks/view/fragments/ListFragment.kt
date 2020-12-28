@@ -9,18 +9,17 @@ import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.demo.sffoodtrucks.R
 import com.demo.sffoodtrucks.databinding.FragmentListBinding
-import com.demo.sffoodtrucks.model.FoodTruckItem
 import com.demo.sffoodtrucks.util.CheckConnectivity
 import com.demo.sffoodtrucks.util.NetworkResponseWrapper
 import com.demo.sffoodtrucks.view.adapters.FoodTruckListAdapter
 import com.demo.sffoodtrucks.viewmodel.SharedViewModel
 import kotlinx.android.synthetic.main.fragment_list.*
+import kotlin.collections.ArrayList
 
 /* Written by Nathan N 12/27/2020
 
@@ -69,9 +68,8 @@ class ListFragment : Fragment() {
 
                         fragmentListBinding.progressBar.visibility = View.INVISIBLE
                         sharedViewModel.openFoodTrucksLiveData.observe(
-                            viewLifecycleOwner,
-                            Observer { fti ->
-                                foodTruckListAdapter.updateFoodTruckList(fti as ArrayList<FoodTruckItem>)
+                            viewLifecycleOwner, { fti ->
+                                foodTruckListAdapter.updateFoodTruckList(ArrayList(fti))
                             })
                     }
                     "error" -> {

@@ -33,6 +33,7 @@ class SharedViewModel(private val repo: Repository = Repository()) : ViewModel()
     //We have to expose openFoodTrucksLiveData to ListFragment
     var openFoodTrucksLiveData: MutableLiveData<List<FoodTruckItem>>    = MutableLiveData(arrayListOf())
 
+    //gets list of open food trucks and sort them
     fun updateOpenFoodTrucks() {
 
         //set network wrapper state to loading first
@@ -47,7 +48,8 @@ class SharedViewModel(private val repo: Repository = Repository()) : ViewModel()
 
             if (responseWrapper.state == "success") {
 
-                val list = filterOpenFoodTrucks(responseWrapper)
+                val list = filterOpenFoodTrucks(responseWrapper)?.sortedBy {it.applicant}
+
                 openFoodTrucksLiveData.postValue(list)
 
                 //empty response case, when all trucks are closed.
@@ -58,7 +60,7 @@ class SharedViewModel(private val repo: Repository = Repository()) : ViewModel()
     }
 
     private fun filterOpenFoodTrucks(responseWrapper: NetworkResponseWrapper): List<FoodTruckItem>? {
-        return responseWrapper.allFoodTrucksLiveData?.value?.filter { fti ->
+        return responseWrapper.allFoodTrucksLiveData?.value?.filter{ fti ->
             isFoodTruckOpen(fti)
         }
     }
